@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Eyebrow from "./Eyebrow";
 
 const STACK = [
   "Next.js (App Router)",
@@ -58,13 +59,11 @@ export default function ProjectWorldcast() {
     <section
       id="worldcast-intelligence"
       ref={rootRef}
-      className="border-b border-zinc-800 bg-zinc-950 px-6 py-24"
+      className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-6 py-28"
     >
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
-        <div className="project-reveal flex flex-col gap-3">
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-zinc-700/80 bg-zinc-900/50 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-400">
-            Proyecto
-          </span>
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
+        <div className="project-reveal flex flex-col gap-4 sm:max-w-2xl">
+          <Eyebrow>Proyecto</Eyebrow>
           <h2 className="text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
             Worldcast Intelligence
           </h2>
@@ -82,10 +81,10 @@ export default function ProjectWorldcast() {
           {HIGHLIGHTS.map((h) => (
             <div
               key={h.title}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4"
+              className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-white/20 hover:bg-white/[0.05]"
             >
               <h3 className="text-sm font-semibold text-zinc-50">{h.title}</h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-zinc-400">
+              <p className="mt-2 text-xs leading-relaxed text-zinc-400">
                 {h.description}
               </p>
             </div>
@@ -100,7 +99,7 @@ export default function ProjectWorldcast() {
             {STACK.map((s) => (
               <span
                 key={s}
-                className="rounded-full border border-zinc-800 bg-zinc-900/70 px-3 py-1.5 text-xs font-medium text-zinc-300"
+                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-zinc-300"
               >
                 {s}
               </span>

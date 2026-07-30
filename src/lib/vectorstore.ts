@@ -47,11 +47,26 @@ function cosineSimilarity(a: number[], b: number[]): number {
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-export async function search(queryEmbedding: number[], topK = 4): Promise<Chunk[]> {
+export async function search(
+  queryEmbedding: number[],
+  topK = 4,
+  videoId?: string
+): Promise<Chunk[]> {
   const index = await loadIndex();
-  return index
+  const pool = videoId ? index.filter((c) => c.videoId === videoId) : index;
+
+  return pool
     .map((chunk) => ({ chunk, score: cosineSimilarity(queryEmbedding, chunk.embedding) }))
     .sort((a, b) => b.score - a.score)
     .slice(0, topK)
     .map((r) => r.chunk);
+}
+
+export async function listVideoIds(): Promise<string[]> {
+  const index = await loadIndex();
+  const ids = new Set<string>();
+  for (const chunk of index) {
+    if (chunk.videoId) ids.add(chunk.videoId);
+  }
+  return Array.from(ids);
 }

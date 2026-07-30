@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let body: { query?: unknown };
+  let body: { query?: unknown; videoId?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -39,21 +39,27 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const videoId = typeof body.videoId === "string" && body.videoId.length > 0 ? body.videoId : undefined;
+
   const startedAt = Date.now();
 
   try {
     const queryEmbedding = await embed(query);
-    const relevantChunks = await search(queryEmbedding, 4);
+    const relevantChunks = await search(queryEmbedding, 4, videoId);
 
     const context = relevantChunks.length
       ? relevantChunks.map((c) => `Fuente: ${c.source}\n${c.text}`).join("\n\n---\n\n")
       : "No hay contexto disponible.";
 
+    const scopeNote = videoId
+      ? "Responde únicamente sobre el vídeo seleccionado por el usuario. "
+      : "";
+
     const answer = await chat([
       {
         role: "system",
         content:
-          "Eres el asistente de Worldcast. Responde únicamente en base al contexto proporcionado. " +
+          `Eres el asistente de Worldcast. ${scopeNote}Responde únicamente en base al contexto proporcionado. ` +
           "Si el contexto no contiene la respuesta, dilo explícitamente en lugar de inventar información.\n\n" +
           `Contexto:\n${context}`,
       },
@@ -64,6 +70,7 @@ export async function POST(request: NextRequest) {
       JSON.stringify({
         type: "chat_query",
         ip,
+        videoId: videoId ?? null,
         durationMs: Date.now() - startedAt,
         chunksUsed: relevantChunks.length,
       })

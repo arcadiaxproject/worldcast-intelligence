@@ -3,35 +3,8 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-interface VideoInfo {
-  id: string;
-  title: string;
-  durationSeconds: number;
-}
-
-const VIDEOS: VideoInfo[] = [
-  {
-    id: "vh2kzlw3go8",
-    title: "La IA es un Tsunami: ¿Estos son los únicos trabajos que van a sobrevivir en 2030?",
-    durationSeconds: 6139,
-  },
-  {
-    id: "eLEyiVDBHQQ",
-    title: "Los agentes de IA ya han llegado: cómo hacer que la IA trabaje para ti",
-    durationSeconds: 7759,
-  },
-  {
-    id: "NWfMNnZ-C4s",
-    title: "Experto en IA advierte: no tienes idea de lo que se viene",
-    durationSeconds: 7043,
-  },
-  {
-    id: "rwRxe1XDq40",
-    title: "Tus datos están en la Dark Web: un experto en ciberseguridad te lo demuestra",
-    durationSeconds: 6435,
-  },
-];
+import Eyebrow from "./Eyebrow";
+import { VIDEOS } from "@/lib/videos";
 
 function formatDuration(totalSeconds: number): string {
   const hours = Math.floor(totalSeconds / 3600);
@@ -40,7 +13,11 @@ function formatDuration(totalSeconds: number): string {
   return `${minutes} min`;
 }
 
-export default function VideoGallery() {
+export default function VideoGallery({
+  onAsk,
+}: {
+  onAsk?: (videoId: string) => void;
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,49 +44,56 @@ export default function VideoGallery() {
     <section
       id="videos"
       ref={rootRef}
-      className="border-b border-zinc-800 bg-zinc-950 px-6 py-24"
+      className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-6 py-28"
     >
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
-        <div className="flex flex-col gap-3">
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-zinc-700/80 bg-zinc-900/50 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-400">
-            Base de conocimiento
-          </span>
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
+        <div className="flex flex-col gap-4 sm:max-w-2xl">
+          <Eyebrow>Base de conocimiento</Eyebrow>
           <h2 className="text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
             Vídeos indexados
           </h2>
           <p className="text-sm leading-relaxed text-zinc-400">
             El asistente responde en base al contenido de estos vídeos, transcritos
-            localmente con Whisper y vectorizados para búsqueda semántica. Pregúntale
-            algo sobre cualquiera de ellos en el chat.
+            localmente con Whisper y vectorizados para búsqueda semántica. Elige uno
+            para preguntarle solo a él en el chat.
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {VIDEOS.map((v) => (
-            <a
+            <div
               key={v.id}
-              href={`https://www.youtube.com/watch?v=${v.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="video-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50 transition-colors hover:border-zinc-700"
+              className="video-card group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition-colors hover:border-white/20 hover:bg-white/[0.05]"
             >
-              <div className="relative aspect-video w-full overflow-hidden bg-zinc-900">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`}
-                  alt={v.title}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <span className="absolute bottom-2 right-2 rounded-md bg-black/80 px-1.5 py-0.5 text-[11px] font-medium text-zinc-200">
-                  {formatDuration(v.durationSeconds)}
-                </span>
-              </div>
-              <div className="p-4">
+              <a
+                href={`https://www.youtube.com/watch?v=${v.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="relative aspect-video w-full overflow-hidden bg-zinc-900">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`}
+                    alt={v.title}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <span className="absolute bottom-2 right-2 rounded-md bg-black/80 px-1.5 py-0.5 text-[11px] font-medium text-zinc-200">
+                    {formatDuration(v.durationSeconds)}
+                  </span>
+                </div>
+              </a>
+              <div className="flex flex-1 flex-col gap-3 p-4">
                 <p className="text-sm font-medium leading-snug text-zinc-100">
                   {v.title}
                 </p>
+                <button
+                  onClick={() => onAsk?.(v.id)}
+                  className="mt-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/[0.08]"
+                >
+                  Preguntar sobre este vídeo
+                </button>
               </div>
-            </a>
+            </div>
           ))}
         </div>
       </div>
