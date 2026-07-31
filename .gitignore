@@ -40,7 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# generated vector index
-/data/index.json
-/data/index.videos.json
+# media sources (videos, not the generated index)
 /media/
