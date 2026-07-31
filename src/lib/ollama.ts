@@ -59,7 +59,8 @@ export async function chat(
       stream: false,
       options: {
         num_predict: 900,
-        temperature: 0.6,
+        temperature: 0.2,
+        top_p: 0.9,
       },
     },
     signal
