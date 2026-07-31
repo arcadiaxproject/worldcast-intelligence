@@ -55,7 +55,7 @@ export default function ProjectWorldcast() {
   return (
     <section
       id="worldcast-intelligence"
-      className="relative flex min-h-screen items-center overflow-hidden border-t border-white/10 bg-zinc-950 px-6 py-28"
+      className="relative flex min-h-screen items-center overflow-hidden border-t border-white/10 bg-zinc-950 px-4 py-16 sm:px-6 sm:py-28"
     >
       <div className="pointer-events-none absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-emerald-500/10 blur-[110px]" />
 

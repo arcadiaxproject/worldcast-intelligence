@@ -160,17 +160,17 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="hero-float hero-float-1 absolute -left-8 top-6 flex items-center gap-2 rounded-xl border border-white/10 bg-zinc-900/90 px-3 py-2 text-[11px] font-medium text-zinc-200 shadow-lg backdrop-blur">
+          <div className="hero-float hero-float-1 absolute left-2 top-6 hidden items-center gap-2 rounded-xl border border-white/10 bg-zinc-900/90 px-3 py-2 text-[11px] font-medium text-zinc-200 shadow-lg backdrop-blur sm:-left-8 sm:flex">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             IA local activa
           </div>
 
-          <div className="hero-float hero-float-2 absolute -right-6 top-1/2 flex flex-col rounded-xl border border-white/10 bg-zinc-900/90 px-3 py-2 shadow-lg backdrop-blur">
+          <div className="hero-float hero-float-2 absolute right-2 top-1/2 hidden flex-col rounded-xl border border-white/10 bg-zinc-900/90 px-3 py-2 shadow-lg backdrop-blur sm:-right-6 sm:flex">
             <span className="text-sm font-bold text-emerald-400">412</span>
             <span className="text-[10px] text-zinc-400">fragmentos indexados</span>
           </div>
 
-          <div className="hero-float absolute -bottom-6 left-8 flex flex-col rounded-xl border border-white/10 bg-zinc-900/90 px-3 py-2 shadow-lg backdrop-blur">
+          <div className="hero-float absolute bottom-2 left-2 hidden flex-col rounded-xl border border-white/10 bg-zinc-900/90 px-3 py-2 shadow-lg backdrop-blur sm:-bottom-6 sm:left-8 sm:flex">
             <span className="text-sm font-bold text-zinc-50">2 vídeos</span>
             <span className="text-[10px] text-zinc-400">transcritos con Whisper</span>
           </div>

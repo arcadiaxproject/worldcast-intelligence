@@ -4,7 +4,7 @@ export default function WhyJoin() {
   return (
     <section
       id="por-que-yo"
-      className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-6 py-28"
+      className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-4 py-16 sm:px-6 sm:py-28"
     >
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center">
         <Eyebrow className="whyjoin-reveal">Para cerrar</Eyebrow>
@@ -15,7 +15,7 @@ export default function WhyJoin() {
 
         <div className="whyjoin-reveal flex flex-col gap-4 text-left">
           <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
-            Aunque me encuentro al comienzo de mi carrera profesional, he tenido la
+           He tenido la
             oportunidad de trabajar como <strong className="font-semibold text-zinc-100">desarrollador Full Stack</strong> en
             distintos proyectos, participando tanto en el desarrollo de interfaces
             como en la implementación de <strong className="font-semibold text-zinc-100">servicios backend, APIs y
