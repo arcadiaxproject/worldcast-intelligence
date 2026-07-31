@@ -38,12 +38,25 @@ export async function DELETE(request: NextRequest) {
     return Response.json({ ok: true });
   }
 
-  const { error } = await supabase.from("conversations").delete().eq("video_id", videoId);
+  const { error, count } = await supabase
+    .from("conversations")
+    .delete({ count: "exact" })
+    .eq("video_id", videoId);
 
   if (error) {
     console.error(JSON.stringify({ type: "supabase_delete_error", error: error.message }));
     return Response.json({ error: "No se pudo borrar la conversación." }, { status: 500 });
   }
 
-  return Response.json({ ok: true });
+  if (!count) {
+    console.error(
+      JSON.stringify({
+        type: "supabase_delete_no_rows",
+        videoId,
+        hint: "0 filas borradas: probablemente falta la política RLS de DELETE en Supabase.",
+      })
+    );
+  }
+
+  return Response.json({ ok: true, deleted: count ?? 0 });
 }
