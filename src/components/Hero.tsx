@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Eyebrow from "./Eyebrow";
+import CinematicIntro from "./CinematicIntro";
 
 const CHECKLIST = [
   "IA 100% local, cero dependencia de proveedores externos",
@@ -94,7 +95,7 @@ export default function Hero() {
           <h1 className="flex flex-col text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl">
             <span className="hero-name text-zinc-50">Javier Navas</span>
             <span className="hero-role text-emerald-400">
-              Desarrollador Full Stack con IA como copiloto
+              Desarrollador Full Stack con IA como motor
             </span>
           </h1>
 
@@ -115,9 +116,10 @@ export default function Hero() {
           </ul>
 
           <div className="hero-actions flex flex-wrap gap-3 pt-3">
+            <CinematicIntro />
             <a
               href="#worldcast-intelligence"
-              className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-5 py-2.5 text-sm font-semibold text-zinc-950 transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-5 py-2.5 text-sm font-medium text-emerald-300 backdrop-blur transition-colors hover:bg-emerald-400/20"
             >
               Ver proyecto
               <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">

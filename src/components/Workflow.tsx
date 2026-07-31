@@ -1,8 +1,3 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Eyebrow from "./Eyebrow";
 
 const STEPS = [
@@ -39,43 +34,9 @@ const STEPS = [
 ];
 
 export default function Workflow() {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      gsap.from(".workflow-step", {
-        y: 24,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top 70%",
-        },
-      });
-
-      gsap.from(".workflow-line", {
-        scaleX: 0,
-        duration: 1,
-        ease: "power2.inOut",
-        transformOrigin: "left center",
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top 70%",
-        },
-      });
-    }, rootRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="workflow"
-      ref={rootRef}
       className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-6 py-28"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">

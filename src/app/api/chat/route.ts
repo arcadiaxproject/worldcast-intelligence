@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { chat, embed, OllamaError } from "@/lib/ollama";
 import { search } from "@/lib/vectorstore";
 import { checkRateLimit } from "@/lib/ratelimit";
+import { saveConversation } from "@/lib/supabase";
 
 const MAX_QUERY_LENGTH = 2000;
 
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const queryEmbedding = await embed(query);
-    const relevantChunks = await search(queryEmbedding, 4, videoId);
+    const relevantChunks = await search(queryEmbedding, 8, videoId);
 
     const context = relevantChunks.length
       ? relevantChunks.map((c) => `Fuente: ${c.source}\n${c.text}`).join("\n\n---\n\n")
@@ -60,7 +61,10 @@ export async function POST(request: NextRequest) {
         role: "system",
         content:
           `Eres el asistente de Worldcast. ${scopeNote}Responde únicamente en base al contexto proporcionado. ` +
-          "Si el contexto no contiene la respuesta, dilo explícitamente en lugar de inventar información.\n\n" +
+          "Si el contexto no contiene la respuesta, dilo explícitamente en lugar de inventar información. " +
+          "Da respuestas completas y bien desarrolladas: explica el razonamiento, añade matices o ejemplos " +
+          "que aparezcan en el contexto, y organiza la respuesta en varios párrafos cuando el tema lo permita. " +
+          "Evita contestar con una sola frase si el contexto da para más.\n\n" +
           `Contexto:\n${context}`,
       },
       { role: "user", content: query },
@@ -76,14 +80,22 @@ export async function POST(request: NextRequest) {
       })
     );
 
-    return Response.json({
+    const MAX_SOURCES_SHOWN = 3;
+    const sources = relevantChunks.slice(0, MAX_SOURCES_SHOWN).map((c) => ({
+      label: c.source,
+      videoId: c.videoId,
+      startSeconds: c.startSeconds,
+    }));
+
+    saveConversation({
+      video_id: videoId ?? null,
+      question: query,
       answer,
-      sources: relevantChunks.map((c) => ({
-        label: c.source,
-        videoId: c.videoId,
-        startSeconds: c.startSeconds,
-      })),
+      sources,
+      ip,
     });
+
+    return Response.json({ answer, sources });
   } catch (err) {
     console.error(
       JSON.stringify({

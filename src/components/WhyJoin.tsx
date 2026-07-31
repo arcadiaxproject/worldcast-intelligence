@@ -1,58 +1,47 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Eyebrow from "./Eyebrow";
 
 export default function WhyJoin() {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      gsap.from(".whyjoin-reveal", {
-        y: 28,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: { trigger: rootRef.current, start: "top 75%" },
-      });
-    }, rootRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="por-que-yo"
-      ref={rootRef}
       className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-6 py-28"
     >
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center">
         <Eyebrow className="whyjoin-reveal">Para cerrar</Eyebrow>
 
         <h2 className="whyjoin-reveal text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
-          Por qué me gustaría formar parte del equipo
+          ¿Por qué contratarme?
         </h2>
 
         <div className="whyjoin-reveal flex flex-col gap-4 text-left">
           <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
-            Hace un par de años hice mis prácticas en una empresa del sector tech,
-            enfocadas en desarrollo web combinado con IA. Desde entonces he seguido
-            profundizando en ambos mundos, y busco una oportunidad que me permita
-            crecer desarrollando software de verdad.
+            Aunque me encuentro al comienzo de mi carrera profesional, he tenido la
+            oportunidad de trabajar como <strong className="font-semibold text-zinc-100">desarrollador Full Stack</strong> en
+            distintos proyectos, participando tanto en el desarrollo de interfaces
+            como en la implementación de <strong className="font-semibold text-zinc-100">servicios backend, APIs y
+            automatización de procesos</strong>.
           </p>
           <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
-            Para demostrar lo que puedo aportar, he construido esta web en menos de
-            24 horas. Aquí puedes comprobar de primera mano mis habilidades: cómo
-            integro IA en local con Ollama (porque no siempre conviene depender de
-            IA en servidores externos), y cómo combino herramientas como Claude
-            Code, Gemini y ChatGPT en mi flujo de desarrollo. Puedes probar el chat
-            tú mismo — sé que no es perfecto, pero la idea es justamente esa: seguir
-            aportando valor de forma continua.
+            Además del desarrollo Full Stack tradicional, me he especializado de
+            forma <strong className="font-semibold text-zinc-100">autodidacta en la aplicación de la inteligencia
+            artificial</strong> al desarrollo de software. Trabajo con herramientas que
+            aceleran el ciclo de desarrollo y también con{" "}
+            <strong className="font-semibold text-zinc-100">
+              modelos ejecutados de forma local, agentes de IA, RAG,
+              automatizaciones e integraciones
+            </strong>{" "}
+            en aplicaciones reales, como las que he desarrollado en mis proyectos
+            personales.
+          </p>
+          <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
+            Creo que esta combinación me permite aportar{" "}
+            <strong className="font-semibold text-zinc-100">un perfil diferente</strong>: no solo puedo
+            desarrollar <strong className="font-semibold text-zinc-100">aplicaciones de extremo a extremo</strong>,
+            sino también incorporar <strong className="font-semibold text-zinc-100">soluciones basadas en IA</strong> que
+            mejoran la productividad, automatizan procesos y amplían las
+            capacidades del software. Mi objetivo es seguir creciendo como
+            ingeniero mientras ayudo a los equipos a adoptar estas tecnologías de
+            forma práctica y eficiente.
           </p>
         </div>
 

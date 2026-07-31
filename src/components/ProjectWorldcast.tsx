@@ -1,8 +1,3 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Eyebrow from "./Eyebrow";
 
 const STACK = [
@@ -18,80 +13,90 @@ const HIGHLIGHTS = [
   {
     title: "IA 100% local",
     description:
-      "El modelo de lenguaje y los embeddings corren en Ollama, en la propia máquina. Ningún dato ni consulta sale hacia un proveedor de inferencia externo.",
+      "Nada de mandar tus preguntas a servidores de terceros: el modelo y los embeddings corren aquí mismo, en mi máquina, con Ollama. Tus datos no salen de casa.",
+    icon: (
+      <path
+        d="M10 2l6.5 3.75v8.5L10 18l-6.5-3.75v-8.5L10 2z M10 2v16 M3.5 5.75L10 9.5l6.5-3.75 M3.5 14.25L10 10.5l6.5 3.75"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    ),
   },
   {
     title: "RAG desde cero",
     description:
-      "Pipeline propio de ingesta: los documentos se trocean, se vectorizan (nomic-embed-text) y se indexan localmente para recuperar el contexto más relevante en cada consulta.",
+      "Construí yo mismo el pipeline: trocea el contenido, lo convierte en vectores y busca el fragmento más relevante antes de responder. Sin atajos ni librerías mágicas.",
+    icon: (
+      <>
+        <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.4" />
+        <path d="M16.5 16.5L13 13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      </>
+    ),
   },
   {
-    title: "API con criterio de producción",
+    title: "Pensado para no romperse",
     description:
-      "Rate limiting por IP, validación del tamaño de las consultas, manejo explícito de errores de conexión con Ollama y logging estructurado de cada petición.",
+      "Límite de peticiones, validaciones, mensajes claros si algo falla y registro de cada consulta. Los detalles que separan un experimento de algo que se puede usar de verdad.",
+    icon: (
+      <path
+        d="M10 2l7 3.5v5c0 4.5-3 7.5-7 8.5-4-1-7-4-7-8.5v-5L10 2z M7 10l2 2 4-4"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    ),
   },
 ];
 
 export default function ProjectWorldcast() {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      gsap.from(".project-reveal", {
-        y: 32,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.08,
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top 75%",
-        },
-      });
-    }, rootRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="worldcast-intelligence"
-      ref={rootRef}
-      className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-6 py-28"
+      className="relative flex min-h-screen items-center overflow-hidden border-t border-white/10 bg-zinc-950 px-6 py-28"
     >
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
+      <div className="pointer-events-none absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-emerald-500/10 blur-[110px]" />
+
+      <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-12">
         <div className="project-reveal flex flex-col gap-4 sm:max-w-2xl">
           <Eyebrow>Proyecto</Eyebrow>
           <h2 className="text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
             Worldcast Intelligence
           </h2>
-          <p className="text-sm leading-relaxed text-zinc-400">
-            Esta misma página es el proyecto: una plataforma que responde preguntas
-            sobre contenido propio combinando recuperación de información (RAG) con
-            un modelo de lenguaje ejecutado íntegramente en local mediante Ollama.
-            Nace de una premisa clara: el modelo, los embeddings y los datos deben
-            permanecer bajo control total, sin depender de servicios de inferencia
-            externos ni exponer directamente el motor de IA a Internet.
+          <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
+            Sí, esta misma página es el proyecto. Le puedes preguntar cosas sobre
+            contenido real y te responde apoyándose en un modelo de IA que corre
+            enterito en local, sin llamar a ningún servidor externo. La idea de
+            fondo es sencilla: el modelo, los datos y las respuestas se quedan bajo
+            mi control, punto.
           </p>
         </div>
 
-        <div className="project-reveal grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-3">
           {HIGHLIGHTS.map((h) => (
             <div
               key={h.title}
-              className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-white/20 hover:bg-white/[0.05]"
+              className="project-reveal group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all hover:-translate-y-0.5 hover:border-emerald-400/30 hover:bg-white/[0.05]"
             >
-              <h3 className="text-sm font-semibold text-zinc-50">{h.title}</h3>
-              <p className="mt-2 text-xs leading-relaxed text-zinc-400">
+              <div className="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-emerald-400/0 blur-2xl transition-colors group-hover:bg-emerald-400/10" />
+
+              <span className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+                <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5">
+                  {h.icon}
+                </svg>
+              </span>
+
+              <h3 className="relative text-sm font-semibold text-zinc-50">{h.title}</h3>
+              <p className="relative text-xs leading-relaxed text-zinc-400">
                 {h.description}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="project-reveal flex flex-col gap-3">
+        <div className="project-reveal flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
             Stack
           </h3>
@@ -99,17 +104,19 @@ export default function ProjectWorldcast() {
             {STACK.map((s) => (
               <span
                 key={s}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-zinc-300"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300"
               >
+                <span className="h-1 w-1 rounded-full bg-emerald-400" />
                 {s}
               </span>
             ))}
           </div>
         </div>
 
-        <p className="project-reveal text-xs text-zinc-500">
-          Prueba el chat justo debajo: hace RAG en tiempo real contra el motor de IA
-          local y responde solo con base en el contenido indexado.
+        <p className="project-reveal flex items-center gap-2 text-xs text-zinc-500">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+          Más abajo tienes el chat de verdad — pruébalo, dale caña y comprueba tú
+          mismo que no es solo una maqueta bonita.
         </p>
       </div>
     </section>

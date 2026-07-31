@@ -53,7 +53,15 @@ export async function chat(
 ): Promise<string> {
   const res = await ollamaFetch(
     "/api/chat",
-    { model: CHAT_MODEL, messages, stream: false },
+    {
+      model: CHAT_MODEL,
+      messages,
+      stream: false,
+      options: {
+        num_predict: 900,
+        temperature: 0.6,
+      },
+    },
     signal
   );
   const data = (await res.json()) as { message: { content: string } };
