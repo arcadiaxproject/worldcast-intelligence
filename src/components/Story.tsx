@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Eyebrow from "./Eyebrow";
@@ -29,39 +29,63 @@ const TIMELINE = [
   },
 ];
 
+function ArrowIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
+      <path
+        d={direction === "left" ? "M12 4l-6 6 6 6" : "M8 4l6 6-6 6"}
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Story() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      gsap.from(".story-item", {
+      gsap.from(".story-intro", {
+        y: 24,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+        scrollTrigger: { trigger: rootRef.current, start: "top 70%" },
+      });
+
+      gsap.from(".story-carousel", {
         y: 32,
         opacity: 0,
         duration: 0.7,
         ease: "power3.out",
-        stagger: 0.12,
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top 70%",
-        },
-      });
-
-      gsap.from(".story-pitch", {
-        y: 24,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".story-pitch",
-          start: "top 80%",
-        },
+        scrollTrigger: { trigger: rootRef.current, start: "top 65%" },
       });
     }, rootRef);
 
     return () => ctx.revert();
   }, []);
+
+  useEffect(() => {
+    if (!imageRef.current) return;
+    gsap.fromTo(
+      imageRef.current,
+      { opacity: 0, scale: 1.03 },
+      { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
+    );
+  }, [index]);
+
+  function go(delta: number) {
+    setIndex((i) => (i + delta + TIMELINE.length) % TIMELINE.length);
+  }
+
+  const current = TIMELINE[index];
 
   return (
     <section
@@ -70,7 +94,7 @@ export default function Story() {
       className="flex min-h-screen items-center border-t border-white/10 bg-zinc-950 px-6 py-28"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-12">
-        <div className="flex flex-col gap-4 sm:max-w-2xl">
+        <div className="story-intro flex flex-col gap-4 sm:max-w-2xl">
           <Eyebrow>Por qué este proyecto</Eyebrow>
           <h2 className="text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
             Cómo llegué hasta Worldcast
@@ -81,52 +105,59 @@ export default function Story() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-3">
-          {TIMELINE.map((item) => (
-            <div
-              key={item.title}
-              className="story-item flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]"
-            >
-              <div className="relative aspect-video w-full overflow-hidden bg-zinc-900">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="flex flex-col gap-2 p-5">
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
-                  {item.year}
-                </span>
-                <h3 className="text-sm font-semibold text-zinc-50">{item.title}</h3>
-                <p className="text-xs leading-relaxed text-zinc-400">
-                  {item.description}
-                </p>
-              </div>
+        <div className="story-carousel flex flex-col gap-5">
+          <div className="relative h-[26rem] w-full overflow-hidden rounded-3xl border border-white/10 bg-zinc-900 sm:h-[34rem] lg:h-[42rem]">
+            <div ref={imageRef} className="absolute inset-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={current.image}
+                alt={current.title}
+                className="h-full w-full object-cover"
+              />
             </div>
-          ))}
-        </div>
 
-        <div className="story-pitch rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-          <h3 className="text-lg font-semibold text-zinc-50">
-            Por qué me gustaría formar parte del proyecto
-          </h3>
-          <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-            Hace un par de años hice mis prácticas en una empresa del sector tech,
-            enfocadas en desarrollo web combinado con IA. Desde entonces he seguido
-            profundizando en ambos mundos, y busco una oportunidad que me permita
-            crecer desarrollando software de verdad.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-            Para demostrar lo que puedo aportar, he construido esta web en menos de
-            24 horas. Aquí puedes comprobar de primera mano mis habilidades: cómo
-            integro IA en local con Ollama (porque no siempre conviene depender de
-            IA en servidores externos), y cómo combino herramientas como Claude
-            Code, Gemini y ChatGPT en mi flujo de desarrollo. Puedes probar el chat
-            tú mismo — sé que no es perfecto, pero la idea es justamente esa: seguir
-            aportando valor de forma continua.
-          </p>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/10 to-transparent" />
+
+            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1.5 p-6 sm:p-8">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-emerald-400">
+                {current.year}
+              </span>
+              <h3 className="text-xl font-bold text-zinc-50 sm:text-2xl">{current.title}</h3>
+              <p className="max-w-xl text-sm leading-relaxed text-zinc-300">
+                {current.description}
+              </p>
+            </div>
+
+            <button
+              onClick={() => go(-1)}
+              aria-label="Anterior"
+              className="absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-950/60 text-zinc-100 backdrop-blur transition-colors hover:bg-zinc-950/90"
+            >
+              <ArrowIcon direction="left" />
+            </button>
+            <button
+              onClick={() => go(1)}
+              aria-label="Siguiente"
+              className="absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-950/60 text-zinc-100 backdrop-blur transition-colors hover:bg-zinc-950/90"
+            >
+              <ArrowIcon direction="right" />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-center gap-2">
+            {TIMELINE.map((item, i) => (
+              <button
+                key={item.title}
+                onClick={() => setIndex(i)}
+                aria-label={item.title}
+                className={
+                  i === index
+                    ? "h-2 w-6 rounded-full bg-emerald-400 transition-all"
+                    : "h-2 w-2 rounded-full bg-white/20 transition-all hover:bg-white/40"
+                }
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

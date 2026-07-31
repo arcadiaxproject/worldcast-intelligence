@@ -1,7 +1,6 @@
 const LINKS = [
   { href: "#historia", label: "Mi historia" },
   { href: "#worldcast-intelligence", label: "Proyecto" },
-  { href: "#videos", label: "Vídeos" },
   { href: "#workflow", label: "Workflow" },
   { href: "#chat", label: "Chat" },
 ];
